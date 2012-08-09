@@ -54,7 +54,7 @@ do
   echo "" | cat - $f | tee -a ${BUILD_DEST}/sites/default/settings.php > /dev/null
 done
 
-tee -a ${BUILD_DEST}/sites/default/settings.php << 'EOH'
+tee -a ${BUILD_DEST}/sites/default/settings.php << 'EOH' > /dev/null
 
 /**
  * Include additional settings files.
@@ -68,7 +68,7 @@ EOH
 chmod u-w ${BUILD_DEST}/sites/default/settings.php
 
 # Add snippet that allows basic auth through settings.php
-tee -a ${BUILD_DEST}/.htaccess << 'EOH'
+tee -a ${BUILD_DEST}/.htaccess << 'EOH' > /dev/null
 
 # Required for user/password authentication on development environments.
 RewriteEngine on
