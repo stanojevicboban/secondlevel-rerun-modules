@@ -35,8 +35,8 @@ realpath() {
 }
 
 # Convert to absolute paths
-BUILD_FILE=realpath($BUILD_FILE)
-BUILD_DEST=realpath($BUILD_DEST)
+BUILD_FILE=realpath "$BUILD_FILE"
+BUILD_DEST=realpath "$BUILD_DEST"
 
 # Drush make the site structure
 echo "Running Drush Make..."
