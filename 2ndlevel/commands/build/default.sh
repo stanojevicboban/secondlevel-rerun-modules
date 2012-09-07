@@ -40,6 +40,7 @@ BUILD_DEST=`realpath "$BUILD_DEST"`
 
 # Drush make the site structure
 echo "Running Drush Make..."
+cd `dirname $BUILD_FILE` # Must be in dir for drush make's includes[] to work.
 cat ${BUILD_FILE} | sed "s/^\(projects\[${PROJECT}\].*\)develop$/\1${REVISION}/" | drush make php://stdin ${BUILD_DEST} \
   --working-copy \
   --prepare-install \
