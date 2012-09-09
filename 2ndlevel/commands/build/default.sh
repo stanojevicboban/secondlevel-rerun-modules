@@ -29,11 +29,6 @@ set -e
 # (Will only work on PHP 5.3+)
 drush dl composer --no
 
-# Alternative to `readlink -f` for OSX (where unavailable)
-realpath() {
-    [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
-}
-
 # Convert to absolute paths
 BUILD_FILE=`realpath "$BUILD_FILE"`
 BUILD_DEST=`realpath "$BUILD_DEST"`

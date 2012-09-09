@@ -33,3 +33,7 @@ rerun_option_check() {
     [ "$1" -lt 2 ] && rerun_option_error
 }
 
+# Alternative to `readlink -f` for OSX (where unavailable)
+realpath() {
+    [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+}
