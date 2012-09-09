@@ -65,14 +65,15 @@ git push origin ${BRANCH}
 alias drush="drush --include=${WORKSPACE}/profile/tmp/scripts --config=${WORKSPACE}/profile/tmp/scripts/${PROJECT}.acapi.drushrc.php --alias-path=${WORKSPACE}/profile/tmp/scripts"
 
 TASK_ID=`drush @${PROJECT}.dev ac-database-backup ${PROJECT} 2>&1 | awk '{ print $2 }'`
+echo $TASK_ID
 
 poll_count=0
-while [[ "`drush @${PROJECT}.dev ac-task-info $TASK_ID 2>&1 | grep -E '^ state' | awk '{ print $NF }'`" != "done" ]]
+while [[ "`drush @${PROJECT}.dev ac-task-info $TASK_ID | grep -E '^ state' | awk '{ print $NF }'`" != "done" ]]
 do
   poll_count=`expr $poll_count + 1`
   echo "API polls: $poll_count"
   if [[ "$poll_count" -gt 10 ]]; then
-    exit
+    exit 1
   fi
   sleep 1
 done
