@@ -25,16 +25,15 @@
 
 set -e
 
-# Prepare for running Rerun
-export RERUN_MODULES=`readlink -f $WORKSPACE/profile/tmp/scripts/rerun-modules`
-export PATH=$PATH:`readlink -f $WORKSPACE/profile/tmp/scripts/rerun`
-
-PROJECT=2ndlevel
+BRANCH=develop
 
 # Execute site build script
-rerun 2ndlevel:build --build-file $WORKSPACE/profile/build-${PROJECT}.make --destination $WORKSPACE/build
+rerun 2ndlevel:build \
+  --build-file $WORKSPACE/profile/build-${PROJECT}.make \
+  --destination $WORKSPACE/build \
+  --project ${PROJECT}
 
-git clone --branch develop $REPO $WORKSPACE/acquia
+git clone --branch ${BRANCH} ${REPO} $WORKSPACE/acquia
 cd $WORKSPACE/acquia
 git rm -r --force --quiet docroot
 
@@ -53,22 +52,37 @@ if [ "$(git diff --quiet --exit-code --cached; echo $?)" -eq 0 ]; then
   exit 0
 fi
 
-# Script only gets here if something to commit.
-# VVVVVV
-
-# Get commit message from install profile repo
+# Get commit message from install profile repo and push to $BRANCH
 COMMIT_MSG=`git --git-dir=$WORKSPACE/profile/.git log --oneline --max-count=1`
-
 git commit --message="Profile repo commit $COMMIT_MSG"
+git push origin ${BRANCH}
 
-# TODO: Remove hardcoded branch?
-#git push origin develop
+# Back up database before running remote drush commands on it.
+# We request a backup with the Acquia CLI, and then use the
+# task ID to poll for it to be 'done' before moving on.
+# We provide output for the logs, and a cap of 10 API calls.
 
-#echo "Waiting for push to deploy..." && sleep 5
+drush @${PROJECT}a.dev ac-api-login \
+  --alias-path=${WORKSPACE}/profile/tmp/scripts \
+  --username=${ACAPI_USER} \
+  --password=${ACAPI_PASS}
+
+TASK_ID=`drush @${PROJECT}.dev ac-database-backup ${PROJECT} --alias-path=${WORKSPACE}/profile/tmp/scripts | awk '{ print $2 }'`
+
+poll_count=0
+while [[ "`drush @${PROJECT}.dev ac-task-info $TASK_ID --alias-path=${WORKSPACE}/profile/tmp/scripts | grep -E '^ state' | awk '{ print $NF }'`" != "done" ]]
+do
+  poll_count=`expr $poll_count + 1`
+  echo "API polls: $poll_count"
+  if [[ "$poll_count" -gt 10 ]]; then
+    exit
+  fi
+  sleep 1
+done
+
 # Use drush alias in repo so accessible to developers
-#alias drush='drush --yes --alias-path=$WORKSPACE/profile/tmp/scripts'
-#drush @dev updatedb
-#drush @dev fra
-#drush @dev cc all
+drush @${PROJECT}.dev --alias-path=$WORKSPACE/profile/tmp/scripts --yes updatedb
+drush @${PROJECT}.dev --alias-path=$WORKSPACE/profile/tmp/scripts --yes fra
+drush @${PROJECT}.dev --alias-path=$WORKSPACE/profile/tmp/scripts --yes cc all
 
 # Done
