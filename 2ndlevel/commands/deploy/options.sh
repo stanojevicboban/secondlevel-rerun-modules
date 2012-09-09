@@ -17,8 +17,6 @@ rerun_option_check() {
 while [ "$#" -gt 0 ]; do
     OPT="$1"
     case "$OPT" in
-        --acapi-pass) rerun_option_check $# ; ACAPI_PASS=$2 ; shift ;;
-        --acapi-user) rerun_option_check $# ; ACAPI_USER=$2 ; shift ;;
         -p|--project) rerun_option_check $# ; PROJECT=$2 ; shift ;;
         -r|--repo) rerun_option_check $# ; REPO=$2 ; shift ;;
         # unknown option
@@ -36,8 +34,6 @@ done
 [ -z "$PROJECT" ] && PROJECT=secondlevel
 
 # Check required options are set
-[ -z "$ACAPI_USER" ] && { echo "missing required option: --acapi-user" ; return 2 ; }
-[ -z "$ACAPI_PASS" ] && { echo "missing required option: --acapi-pass" ; return 2 ; }
 [ -z "$REPO" ] && { echo "missing required option: --repo" ; return 2 ; }
 #
 return 0
