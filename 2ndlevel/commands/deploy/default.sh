@@ -62,10 +62,12 @@ git push origin ${BRANCH}
 # task ID to poll for it to be 'done' before moving on.
 # We provide output for the logs, and a cap of 10 API calls.
 
-TASK_ID=`drush @${PROJECT}.dev ac-database-backup ${PROJECT} --include=${WORKSPACE}/profile/tmp/scripts --alias-path=${WORKSPACE}/profile/tmp/scripts | awk '{ print $2 }'`
+alias drush="drush --include=${WORKSPACE}/profile/tmp/scripts --config=${WORKSPACE}/profile/tmp/scripts --alias-path=${WORKSPACE}/profile/tmp/scripts"
+
+TASK_ID=`drush @${PROJECT}.dev ac-database-backup ${PROJECT} | awk '{ print $2 }'`
 
 poll_count=0
-while [[ "`drush @${PROJECT}.dev ac-task-info $TASK_ID --include=${WORKSPACE}/profile/tmp/scripts --alias-path=${WORKSPACE}/profile/tmp/scripts | grep -E '^ state' | awk '{ print $NF }'`" != "done" ]]
+while [[ "`drush @${PROJECT}.dev ac-task-info $TASK_ID | grep -E '^ state' | awk '{ print $NF }'`" != "done" ]]
 do
   poll_count=`expr $poll_count + 1`
   echo "API polls: $poll_count"
@@ -76,8 +78,10 @@ do
 done
 
 # Use drush alias in repo so accessible to developers
-drush @${PROJECT}.dev --alias-path=$WORKSPACE/profile/tmp/scripts --yes updatedb
-drush @${PROJECT}.dev --alias-path=$WORKSPACE/profile/tmp/scripts --yes fra
-drush @${PROJECT}.dev --alias-path=$WORKSPACE/profile/tmp/scripts --yes cc all
+drush @${PROJECT}.dev --yes updatedb
+drush @${PROJECT}.dev --yes fra
+drush @${PROJECT}.dev --yes cc all
+
+unalias drush
 
 # Done
