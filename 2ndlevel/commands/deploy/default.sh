@@ -62,10 +62,6 @@ git push origin ${BRANCH}
 # task ID to poll for it to be 'done' before moving on.
 # We provide output for the logs, and a cap of 10 API calls.
 
-drush @${PROJECT}a.dev ac-api-login \
-  --alias-path=${WORKSPACE}/profile/tmp/scripts \
-  --include=${WORKSPACE}/profile/tmp/scripts
-
 TASK_ID=`drush @${PROJECT}.dev ac-database-backup ${PROJECT} --include=${WORKSPACE}/profile/tmp/scripts --alias-path=${WORKSPACE}/profile/tmp/scripts | awk '{ print $2 }'`
 
 poll_count=0
