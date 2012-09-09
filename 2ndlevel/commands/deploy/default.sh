@@ -64,13 +64,12 @@ git push origin ${BRANCH}
 
 drush @${PROJECT}a.dev ac-api-login \
   --alias-path=${WORKSPACE}/profile/tmp/scripts \
-  --username=${ACAPI_USER} \
-  --password=${ACAPI_PASS}
+  --include=${WORKSPACE}/profile/tmp/scripts
 
-TASK_ID=`drush @${PROJECT}.dev ac-database-backup ${PROJECT} --alias-path=${WORKSPACE}/profile/tmp/scripts | awk '{ print $2 }'`
+TASK_ID=`drush @${PROJECT}.dev ac-database-backup ${PROJECT} --include=${WORKSPACE}/profile/tmp/scripts --alias-path=${WORKSPACE}/profile/tmp/scripts | awk '{ print $2 }'`
 
 poll_count=0
-while [[ "`drush @${PROJECT}.dev ac-task-info $TASK_ID --alias-path=${WORKSPACE}/profile/tmp/scripts | grep -E '^ state' | awk '{ print $NF }'`" != "done" ]]
+while [[ "`drush @${PROJECT}.dev ac-task-info $TASK_ID --include=${WORKSPACE}/profile/tmp/scripts --alias-path=${WORKSPACE}/profile/tmp/scripts | grep -E '^ state' | awk '{ print $NF }'`" != "done" ]]
 do
   poll_count=`expr $poll_count + 1`
   echo "API polls: $poll_count"
