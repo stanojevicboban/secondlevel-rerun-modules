@@ -62,13 +62,18 @@ git push origin ${BRANCH}
 # task ID to poll for it to be 'done' before moving on.
 # We provide output for the logs, and a cap of 10 API calls.
 
-alias drush="drush --include=${WORKSPACE}/profile/tmp/scripts --config=${WORKSPACE}/profile/tmp/scripts/${PROJECT}.acapi.drushrc.php --alias-path=${WORKSPACE}/profile/tmp/scripts"
+alias drush="drush \
+  --include=${WORKSPACE}/profile/tmp/scripts \
+  --config=${WORKSPACE}/profile/tmp/scripts/${PROJECT}.acapi.drushrc.php \
+  --alias-path=${WORKSPACE}/profile/tmp/scripts"
+
+alias
 
 TASK_ID=`drush @${PROJECT}.dev ac-database-backup ${PROJECT} 2>&1 | awk '{ print $2 }'`
 echo $TASK_ID
 
 poll_count=0
-while [[ "`drush @${PROJECT}.dev ac-task-info $TASK_ID | grep -E '^ state' | awk '{ print $NF }'`" != "done" ]]
+while [[ "$(drush @${PROJECT}.dev ac-task-info $TASK_ID | grep -E '^ state' | awk '{ print $NF }')" != "done" ]]
 do
   poll_count=`expr $poll_count + 1`
   echo "API polls: $poll_count"
