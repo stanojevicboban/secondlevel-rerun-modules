@@ -69,7 +69,9 @@ alias drush="drush \
 
 alias
 
-TASK_ID=`drush @${PROJECT}.dev ac-database-backup ${PROJECT} 2>&1 | awk '{ print $2 }'`
+TASK_ID="$(drush @${PROJECT}.dev ac-database-backup ${PROJECT} 2>&1)"
+echo $TASK_ID
+TASK_ID="$(echo $TASK_ID | awk '{ print $2 }')"
 echo $TASK_ID
 
 poll_count=0
