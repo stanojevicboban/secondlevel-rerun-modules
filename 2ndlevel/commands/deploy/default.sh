@@ -62,17 +62,11 @@ git push origin ${BRANCH}
 # task ID to poll for it to be 'done' before moving on.
 # We provide output for the logs, and a cap of 10 API calls.
 
-alias drush="drush \
+TASK_ID="$(drush @${PROJECT}.dev ac-database-backup ${PROJECT} \
   --include=${WORKSPACE}/profile/tmp/scripts \
   --config=${WORKSPACE}/profile/tmp/scripts/${PROJECT}.acapi.drushrc.php \
-  --alias-path=${WORKSPACE}/profile/tmp/scripts"
-
-alias
-
-TASK_ID="$(drush @${PROJECT}.dev ac-database-backup ${PROJECT} 2>&1)"
-echo $TASK_ID
-TASK_ID="$(echo $TASK_ID | awk '{ print $2 }')"
-echo $TASK_ID
+  --alias-path=${WORKSPACE}/profile/tmp/scripts 2>&1 \
+  | awk '{ print $2 }')"
 
 poll_count=0
 while [[ "$(drush @${PROJECT}.dev ac-task-info $TASK_ID | grep -E '^ state' | awk '{ print $NF }')" != "done" ]]
@@ -89,7 +83,5 @@ done
 drush @${PROJECT}.dev --yes updatedb
 drush @${PROJECT}.dev --yes fra
 drush @${PROJECT}.dev --yes cc all
-
-unalias drush
 
 # Done
