@@ -69,7 +69,11 @@ TASK_ID="$(drush @${PROJECT}.dev ac-database-backup ${PROJECT} \
   | awk '{ print $2 }')"
 
 poll_count=0
-while [[ "$(drush @${PROJECT}.dev ac-task-info $TASK_ID | grep -E '^ state' | awk '{ print $NF }')" != "done" ]]
+while [[ "$(drush @${PROJECT}.dev ac-task-info $TASK_ID \
+  --include=${WORKSPACE}/profile/tmp/scripts \
+  --config=${WORKSPACE}/profile/tmp/scripts/${PROJECT}.acapi.drushrc.php \
+  --alias-path=${WORKSPACE}/profile/tmp/scripts 2>&1 \
+  | grep -E '^ state' | awk '{ print $NF }')" != "done" ]]
 do
   poll_count=`expr $poll_count + 1`
   echo "API polls: $poll_count"
@@ -80,8 +84,15 @@ do
 done
 
 # Use drush alias in repo so accessible to developers
+alias drush="drush \
+  --include=${WORKSPACE}/profile/tmp/scripts \
+  --config=${WORKSPACE}/profile/tmp/scripts/${PROJECT}.acapi.drushrc.php \
+  --alias-path=${WORKSPACE}/profile/tmp/scripts"
+
 drush @${PROJECT}.dev --yes updatedb
 drush @${PROJECT}.dev --yes fra
 drush @${PROJECT}.dev --yes cc all
+
+unalias drush
 
 # Done
