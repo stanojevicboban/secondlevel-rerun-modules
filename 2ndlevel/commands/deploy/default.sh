@@ -89,9 +89,10 @@ alias drush="drush \
   --config=${WORKSPACE}/profile/tmp/scripts/${PROJECT}.acapi.drushrc.php \
   --alias-path=${WORKSPACE}/profile/tmp/scripts"
 
+drush @${PROJECT}.dev --yes clear-cache drush
 drush @${PROJECT}.dev --yes updatedb
-drush @${PROJECT}.dev --yes fra
-drush @${PROJECT}.dev --yes cc all
+drush @${PROJECT}.dev --yes features-revert-all
+drush @${PROJECT}.dev --yes clear-cache all
 
 unalias drush
 
