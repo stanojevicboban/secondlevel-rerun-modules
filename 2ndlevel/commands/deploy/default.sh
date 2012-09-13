@@ -83,17 +83,8 @@ do
   sleep 1
 done
 
-# Use drush alias in repo so accessible to developers
-alias drush="drush \
-  --include=${WORKSPACE}/profile/tmp/scripts \
-  --config=${WORKSPACE}/profile/tmp/scripts/${PROJECT}.acapi.drushrc.php \
-  --alias-path=${WORKSPACE}/profile/tmp/scripts"
-
-drush @${PROJECT}.dev --yes clear-cache drush
-drush @${PROJECT}.dev --yes updatedb
-drush @${PROJECT}.dev --yes features-revert-all
-drush @${PROJECT}.dev --yes clear-cache all
-
-unalias drush
+drush @${PROJECT}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts --yes updatedb
+drush @${PROJECT}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts --yes features-revert-all
+drush @${PROJECT}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts --yes clear-cache all
 
 # Done
