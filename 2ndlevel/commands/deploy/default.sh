@@ -85,6 +85,6 @@ done
 
 drush @${PROJECT}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts --yes updatedb
 drush @${PROJECT}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts --yes features-revert-all
-drush @${PROJECT}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts --yes clear-cache all
+drush @${PROJECT}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts --yes cache-clear all
 
 # Done
