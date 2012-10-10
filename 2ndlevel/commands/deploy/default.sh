@@ -84,7 +84,10 @@ do
 done
 
 drush @${PROJECT}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts --yes updatedb
-drush @${PROJECT}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts --yes features-revert-all
+# Force reversion since sometimes its skipped when feature incorrectly assumes no changes.
+drush @${PROJECT}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts --yes features-revert-all --force
 drush @${PROJECT}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts --yes cache-clear all
+# List feature statuses to audit whether reversions happened correctly.
+drush @${PROJECT}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts --yes features-list
 
 # Done
