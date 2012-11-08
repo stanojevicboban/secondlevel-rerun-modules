@@ -29,7 +29,7 @@ BRANCH=develop
 
 # Execute site build script
 rerun 2ndlevel:build \
-  --build-file $WORKSPACE/profile/build-${PROJECT}.make \
+  --buildfile $WORKSPACE/profile/build-${PROJECT}.make \
   --destination $WORKSPACE/build \
   --project ${PROJECT} \
   --install
