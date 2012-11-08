@@ -27,7 +27,7 @@ set -e
 
 # Install composer before running make, if not already installed
 # (Will only work on PHP 5.3+)
-drush dl composer --no
+drush dl composer-8.x-1.0-alpha3 --no
 
 # Convert to absolute paths
 BUILD_FILE=`realpath "$BUILD_FILE"`
@@ -40,13 +40,7 @@ cat ${BUILD_FILE} | sed "s/^\(projects\[${PROJECT}\].*\)develop$/\1${REVISION}/"
   --working-copy \
   --prepare-install \
   --no-gitinfofile \
-  --yes
-
-drush site-install ${PROJECT} \
-  --root=${BUILD_DEST} \
-  --account-pass=admin \
-  --site-name=${PROJECT} \
-  --db-url=mysql://root:root@localhost/${PROJECT} \
+  --prepare-install \
   --yes
 
 chmod u+w ${BUILD_DEST}/sites/default/settings.php
