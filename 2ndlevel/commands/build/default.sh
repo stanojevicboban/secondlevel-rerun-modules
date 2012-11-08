@@ -45,6 +45,14 @@ cat ${BUILDFILE} | sed "s/^\(projects\[${PROJECT}\].*\)develop$/\1${REVISION}/" 
 
 chmod u+w ${DESTINATION}/sites/default/settings.php
 
+# Run only if --install flag is set
+[ "${INSTALL:+x}" ] && drush site-install ${PROJECT} \
+  --root=${DESTINATION} \
+  --account-pass=admin \
+  --site-name=${PROJECT} \
+  --db-url=mysql://root:root@localhost/${PROJECT} \
+  --yes
+
 echo "Appending settings.php snippets..."
 for f in ${DESTINATION}/profiles/${PROJECT}/tmp/snippets/*.settings.php
 do

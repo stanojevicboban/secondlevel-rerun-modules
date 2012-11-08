@@ -19,7 +19,7 @@ while [ "$#" -gt 0 ]; do
     case "$OPT" in
         -f|--buildfile) rerun_option_check $# ; BUILDFILE=$2 ; shift ;;
         -d|--destination) rerun_option_check $# ; DESTINATION=$2 ; shift ;;
-        -i|--install) install=true ;;
+        -i|--install) INSTALL=true ;;
           INSTALL) =true ;;
         -p|--project) rerun_option_check $# ; PROJECT=$2 ; shift ;;
         -r|--revision) rerun_option_check $# ; REVISION=$2 ; shift ;;

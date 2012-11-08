@@ -31,7 +31,8 @@ BRANCH=develop
 rerun 2ndlevel:build \
   --build-file $WORKSPACE/profile/build-${PROJECT}.make \
   --destination $WORKSPACE/build \
-  --project ${PROJECT}
+  --project ${PROJECT} \
+  --install
 
 git clone --branch ${BRANCH} ${REPO} $WORKSPACE/acquia
 cd $WORKSPACE/acquia
