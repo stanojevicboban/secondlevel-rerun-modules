@@ -30,29 +30,29 @@ set -e
 drush dl composer-8.x-1.0-alpha3 --no
 
 # Convert to absolute paths
-BUILD_FILE=`realpath "$BUILD_FILE"`
-BUILD_DEST=`realpath "$BUILD_DEST"`
+BUILDFILE=`realpath "$BUILDFILE"`
+DESTINATION=`realpath "$DESTINATION"`
 
 # Drush make the site structure
 echo "Running Drush Make..."
-cd `dirname $BUILD_FILE` # Must be in dir for drush make's includes[] to work.
-cat ${BUILD_FILE} | sed "s/^\(projects\[${PROJECT}\].*\)develop$/\1${REVISION}/" | drush make php://stdin ${BUILD_DEST} \
+cd `dirname $BUILDFILE` # Must be in dir for drush make's includes[] to work.
+cat ${BUILDFILE} | sed "s/^\(projects\[${PROJECT}\].*\)develop$/\1${REVISION}/" | drush make php://stdin ${DESTINATION} \
   --working-copy \
   --prepare-install \
   --no-gitinfofile \
   --prepare-install \
   --yes
 
-chmod u+w ${BUILD_DEST}/sites/default/settings.php
+chmod u+w ${DESTINATION}/sites/default/settings.php
 
 echo "Appending settings.php snippets..."
-for f in ${BUILD_DEST}/profiles/${PROJECT}/tmp/snippets/*.settings.php
+for f in ${DESTINATION}/profiles/${PROJECT}/tmp/snippets/*.settings.php
 do
   # Concatenate newline and snippet, then append to settings.php
-  echo "" | cat - $f | tee -a ${BUILD_DEST}/sites/default/settings.php > /dev/null
+  echo "" | cat - $f | tee -a ${DESTINATION}/sites/default/settings.php > /dev/null
 done
 
-tee -a ${BUILD_DEST}/sites/default/settings.php << 'EOH' > /dev/null
+tee -a ${DESTINATION}/sites/default/settings.php << 'EOH' > /dev/null
 
 /**
  * Include additional settings files.
@@ -63,10 +63,10 @@ foreach ($additional_settings as $filename) {
 }
 EOH
 
-chmod u-w ${BUILD_DEST}/sites/default/settings.php
+chmod u-w ${DESTINATION}/sites/default/settings.php
 
 # Add snippet that allows basic auth through settings.php
-tee -a ${BUILD_DEST}/.htaccess << 'EOH' > /dev/null
+tee -a ${DESTINATION}/.htaccess << 'EOH' > /dev/null
 
 # Required for user/password authentication on development environments.
 RewriteEngine on
