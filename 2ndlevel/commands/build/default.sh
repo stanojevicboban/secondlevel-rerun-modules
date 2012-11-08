@@ -51,7 +51,7 @@ chmod u+w ${DESTINATION}/sites/default/settings.php
   --account-pass=admin \
   --site-name=${PROJECT} \
   --db-url=mysql://root:root@localhost/${PROJECT} \
-  --yes
+  --yes && chmod u+w ${DESTINATION}/sites/default/settings.php
 
 echo "Appending settings.php snippets..."
 for f in ${DESTINATION}/profiles/${PROJECT}/tmp/snippets/*.settings.php
