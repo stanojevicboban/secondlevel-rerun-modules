@@ -34,14 +34,14 @@ rerun 2ndlevel:build \
   --project ${PROJECT} \
   --install
 
-cd $WORKSPACE/acquia
-
 if [ -n "$(git ls-remote $REPO $BRANCH)" ]; then
   # If branch exists remotely, clone it.
   git clone --branch=${BRANCH} ${REPO} $WORKSPACE/acquia
+  cd $WORKSPACE/acquia
 else
   # If not, clone default and create it.
   git clone ${REPO} $WORKSPACE/acquia
+  cd $WORKSPACE/acquia
   git checkout -b ${BRANCH}
 fi
 
