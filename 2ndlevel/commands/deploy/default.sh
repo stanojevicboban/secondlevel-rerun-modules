@@ -95,9 +95,10 @@ do
   poll_count=`expr $poll_count + 1`
   echo "API polls: $poll_count"
   if [[ "$poll_count" -gt 10 ]]; then
+    echo "ERROR: Timed out while waiting for Acquia backup."
     exit 1
   fi
-  sleep 1
+  sleep 2
 done
 
 drush @${PROJECT}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts --yes updatedb
