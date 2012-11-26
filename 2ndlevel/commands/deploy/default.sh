@@ -34,13 +34,20 @@ rerun 2ndlevel:build \
   --project ${PROJECT} \
   --install
 
+# Create git reference repo if nonexistent.
+export GIT_REFERENCE_DIR=~jenkins/jobs/deploy-dev/$PROJECT.reference.git
+[ -d "$GIT_REFERENCE_DIR" ] || git clone $REPO $GIT_REFERENCE_DIR --mirror
+
 if [ -n "$(git ls-remote $REPO $BRANCH)" ]; then
   # If branch exists remotely, clone it.
-  git clone --branch=${BRANCH} ${REPO} $WORKSPACE/acquia
+  git clone $REPO $WORKSPACE/acquia \
+    --reference=$GIT_REFERENCE_DIR \
+    --branch=$BRANCH
   cd $WORKSPACE/acquia
 else
   # If not, clone default and create it.
-  git clone ${REPO} $WORKSPACE/acquia
+  git clone ${REPO} $WORKSPACE/acquia \
+    --reference=$GIT_REFERENCE_DIR
   cd $WORKSPACE/acquia
   git checkout -b ${BRANCH}
 fi
