@@ -54,31 +54,19 @@ chmod u+w ${DESTINATION}/sites/default/settings.php
   --yes && chmod u+w ${DESTINATION}/sites/default/settings.php
 
 echo "Appending settings.php snippets..."
-for f in ${DESTINATION}/profiles/${PROJECT}/tmp/snippets/*.settings.php
+for f in ${DESTINATION}/profiles/${PROJECT}/tmp/snippets/settings.php/*.settings.php
 do
   # Concatenate newline and snippet, then append to settings.php
   echo "" | cat - $f | tee -a ${DESTINATION}/sites/default/settings.php > /dev/null
 done
 
-tee -a ${DESTINATION}/sites/default/settings.php << 'EOH' > /dev/null
-
-/**
- * Include additional settings files.
- */
-$additional_settings = glob(dirname(__FILE__) . '/settings.*.php');
-foreach ($additional_settings as $filename) {
-  include $filename;
-}
-EOH
-
 chmod u-w ${DESTINATION}/sites/default/settings.php
 
-# Add snippet that allows basic auth through settings.php
-tee -a ${DESTINATION}/.htaccess << 'EOH' > /dev/null
-
-# Required for user/password authentication on development environments.
-RewriteEngine on
-RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization},L]
-EOH
+echo "Appending .htaccess snippets..."
+for f in ${DESTINATION}/profiles/${PROJECT}/tmp/snippets/htaccess/*.htaccess
+do
+  # Concatenate newline and snippet, then append to settings.php
+  echo "" | cat - $f | tee -a ${DESTINATION}/.htaccess > /dev/null
+done
 
 # Done
