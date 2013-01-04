@@ -62,10 +62,17 @@ done
 
 chmod u-w ${DESTINATION}/sites/default/settings.php
 
-echo "Appending .htaccess snippets..."
-for f in ${DESTINATION}/profiles/${PROJECT}/tmp/snippets/htaccess/*.htaccess
+echo "Prepending .htaccess snippets at the start of file."
+for f in snippets/before/*.htaccess
 do
-  # Concatenate newline and snippet, then append to settings.php
+  # Prepend a snippet and a new line to the existing .htaccess file
+  echo "" | cat $f - | cat - ${DESTINATION}/.htaccess > htaccess.tmp && mv htaccesss.tmp ${DESTINATION}/.htaccess
+done
+
+echo "Appending .htaccess snippets at the end of file..."
+for f in ${DESTINATION}/profiles/${PROJECT}/tmp/snippets/htaccess/after/*.htaccess
+do
+  # Concatenate newline and snippet, then append to the existing .htaccess file
   echo "" | cat - $f | tee -a ${DESTINATION}/.htaccess > /dev/null
 done
 
