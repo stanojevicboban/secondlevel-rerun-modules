@@ -66,7 +66,7 @@ echo "Prepending .htaccess snippets at the start of file."
 for f in snippets/before/*.htaccess
 do
   # Prepend a snippet and a new line to the existing .htaccess file
-  echo "" | cat $f - | cat - ${DESTINATION}/.htaccess > htaccess.tmp && mv htaccesss.tmp ${DESTINATION}/.htaccess
+  echo "" | cat $f - | cat - ${DESTINATION}/.htaccess > htaccess.tmp && mv htaccess.tmp ${DESTINATION}/.htaccess
 done
 
 echo "Appending .htaccess snippets at the end of file..."
