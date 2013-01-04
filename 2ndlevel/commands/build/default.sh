@@ -63,7 +63,7 @@ done
 chmod u-w ${DESTINATION}/sites/default/settings.php
 
 echo "Prepending .htaccess snippets at the start of file."
-for f in snippets/before/*.htaccess
+for f in ${DESTINATION}/profiles/${PROJECT}/tmp/snippets/htaccess/before/*.htaccess
 do
   # Prepend a snippet and a new line to the existing .htaccess file
   echo "" | cat $f - | cat - ${DESTINATION}/.htaccess > htaccess.tmp && mv htaccess.tmp ${DESTINATION}/.htaccess
