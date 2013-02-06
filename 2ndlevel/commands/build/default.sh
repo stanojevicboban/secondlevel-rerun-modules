@@ -35,7 +35,9 @@ DESTINATION=`realpath "$DESTINATION"`
 
 # Drush make the site structure
 echo "Running Drush Make..."
+echo "Changing into " `dirname $BUILDFILE`
 cd `dirname $BUILDFILE` # Must be in dir for drush make's includes[] to work.
+echo "Using " $BUILDFILE " to drush make into " $DESTINATION
 cat ${BUILDFILE} | sed "s/^\(projects\[${PROJECT}\].*\)develop$/\1${REVISION}/" | drush make php://stdin ${DESTINATION} \
   --working-copy \
   --prepare-install \
