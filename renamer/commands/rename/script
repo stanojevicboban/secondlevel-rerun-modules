@@ -76,7 +76,7 @@ rm -f SKELETOR-README.md
 # Search and replace within every file where $FROM string found.
 for file in `grep -il "$FROM" *.*`
 do
-  sed -i '' "s/$FROM/$TO/g" $file
+  sed -i '' "s/$FROM/$TO/gI" $file
 done
 
 # Rename all files with $FROM filename pattern.
