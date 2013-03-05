@@ -3,3 +3,4 @@
 NAME=build
 DESCRIPTION="Build the site from install profile."
 
+OPTIONS="buildfile destination install project revision type"

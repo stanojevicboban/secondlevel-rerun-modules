@@ -3,3 +3,4 @@
 NAME=deploy
 DESCRIPTION="Deploy site after building."
 
+OPTIONS="project repo"
