@@ -39,7 +39,6 @@ rerun_options_parse() {
     # Set defaultable options.
     [ -z "$FROM" ] && FROM="$(rerun_property_get $RERUN_MODULE_DIR/options/from DEFAULT)"
     # Check required options are set
-    [ -z "$TO" ] && { echo >&2 "missing required option: --to" ; return 2 ; }
     # If option variables are declared exportable, export them.
     export FROM
     export TO

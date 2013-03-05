@@ -63,7 +63,26 @@ rerun_options_parse "$@"
 # Put the command implementation here.
 # - - -
 
-for f in `find *"$FROM"*`; do mv "$f" "${f//$FROM/$TO}"; done;
+# Post processes the options
+
+[ -z "${TO:-}" ] && {
+    echo "Rename from $FROM to: "
+    read TO
+}
+
+# Remove Skeletor-specific instructions.
+rm -f SKELETOR-README.md
+
+# Search and replace within every file where $FROM string found.
+for file in `grep -il "$FROM" *.*`
+do
+  sed -i '' "s/$FROM/$TO/g" $file
+done
+
+# Rename all files with $FROM filename pattern.
+REGEX_FIND="\(.*\)${FROM}\(.*\)"
+REGEX_REPLACE="mv & \1${TO}\2"
+find . -name "*${FROM}*" | sed "s/$REGEX_FIND/$REGEX_REPLACE/" | bash
 
 # Done. Exit with last command exit status.
 exit $?
