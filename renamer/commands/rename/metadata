@@ -3,4 +3,4 @@
 # Tue  5 Feb 2013 11:08:18 EST
 NAME=rename
 DESCRIPTION="A command to rename the project"
-OPTIONS="from to"
+OPTIONS="from to repo"
