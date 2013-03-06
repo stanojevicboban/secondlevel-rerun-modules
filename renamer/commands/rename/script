@@ -70,6 +70,17 @@ rerun_options_parse "$@"
     read TO
 }
 
+[ -z "${REPO:-}" ] && {
+    echo "Project repository (defaults to myplanetdigital/$TO if left blank): "
+    read REPO
+}
+
+GITHUB_ORG=myplanetdigital
+# If REPO unset or empty string, set default
+[ -z "$REPO" ] && REPO=$GITHUB_ORG/$TO
+REGEX_FIND="$GITHUB_ORG/(drupal-)?$FROM"
+sed -Ei '' "s#$REGEX_FIND#$REPO#" build-*.make
+
 # Remove Skeletor-specific instructions.
 rm -f SKELETOR-README.md
 
