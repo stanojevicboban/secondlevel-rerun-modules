@@ -81,6 +81,11 @@ REGEX_FIND="\(.*\)${FROM}\(.*\)"
 REGEX_REPLACE="mv & \1${TO}\2"
 find . -name "*${FROM}*" | sed "s/$REGEX_FIND/$REGEX_REPLACE/" | bash
 
+# Set git remote and stage changes.
+git remote set-url origin git@github.com:${REPO}.git
+git add --all
+git commit -m "Initial commit for project '$TO'."
+
 # Done. Exit with last command exit status.
 exit $?
 
