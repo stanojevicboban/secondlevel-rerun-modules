@@ -71,17 +71,20 @@ sed -Ei '' "s#$REGEX_FIND#$REPO#" build-*.make
 rm -f SKELETOR-README.md
 
 # Search and replace within every file where $FROM string found.
-for file in `grep -il "$FROM" *.*`
+# Exclude the submodules in tmp/scripts/rerun
+for file in `grep -Ril "$FROM" --exclude-dir tmp/scripts/rerun *`
 do
   perl -pe "s/$FROM/$TO/gi" -i $file
 done
+
+# TODO: Prompt to search-replace host_prefix in drush site alias. (Ex: srv-123)
 
 # Rename all files with $FROM filename pattern.
 REGEX_FIND="\(.*\)${FROM}\(.*\)"
 REGEX_REPLACE="mv & \1${TO}\2"
 find . -name "*${FROM}*" | sed "s/$REGEX_FIND/$REGEX_REPLACE/" | bash
 
-# Set git remote and stage changes.
+# Set git remote and commit changes.
 git remote set-url origin git@github.com:${REPO}.git
 git add --all
 git commit -m "Initial commit for project '$TO'."
