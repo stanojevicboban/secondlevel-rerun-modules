@@ -56,7 +56,7 @@ git rm -r --force --quiet docroot
 
 # rsync build/ dir into acquia repo docroot/
 # (excluding files according to patterns in file, accessible to developers.)
-rsync --archive --exclude-from=$WORKSPACE/profile/tmp/scripts/docroot-exclude.txt $WORKSPACE/build/ $WORKSPACE/acquia/docroot/
+rsync --archive --exclude-from=$WORKSPACE/profile/tmp/conf/docroot-exclude.txt $WORKSPACE/build/ $WORKSPACE/acquia/docroot/
 git add --force docroot/
 
 # Sanity check to see what was commited.
