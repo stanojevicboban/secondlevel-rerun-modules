@@ -27,6 +27,11 @@ set -e
 
 BRANCH=develop
 
+# Set if not already set as envvar.
+if [ -z "$ACQUIA_SUBSCRIPTION" ]; then
+  ACQUIA_SUBSCRIPTION=$PROJECT
+fi
+
 # Execute site build script
 rerun 2ndlevel:build \
   --buildfile $WORKSPACE/profile/build-${PROJECT}.make \
@@ -79,17 +84,17 @@ git push origin ${BRANCH}
 # task ID to poll for it to be 'done' before moving on.
 # We provide output for the logs, and a cap of 10 API calls.
 
-TASK_ID="$(drush @${PROJECT}.dev ac-database-backup ${PROJECT} \
-  --include=${WORKSPACE}/profile/tmp/scripts \
-  --config=${WORKSPACE}/profile/tmp/scripts/${PROJECT}.acapi.drushrc.php \
-  --alias-path=${WORKSPACE}/profile/tmp/scripts 2>&1 \
+TASK_ID="$(drush @${ACQUIA_SUBSCRIPTION}.dev ac-database-backup ${ACQUIA_SUBSCRIPTION} \
+  --include=${WORKSPACE}/profile/tmp/scripts/drush \
+  --config=${WORKSPACE}/profile/tmp/scripts/drush/${ACQUIA_SUBSCRIPTION}.acapi.drushrc.php \
+  --alias-path=${WORKSPACE}/profile/tmp/scripts/drush 2>&1 \
   | awk '{ print $2 }')"
 
 poll_count=0
-while [[ "$(drush @${PROJECT}.dev ac-task-info $TASK_ID \
-  --include=${WORKSPACE}/profile/tmp/scripts \
-  --config=${WORKSPACE}/profile/tmp/scripts/${PROJECT}.acapi.drushrc.php \
-  --alias-path=${WORKSPACE}/profile/tmp/scripts 2>&1 \
+while [[ "$(drush @${ACQUIA_SUBSCRIPTION}.dev ac-task-info $TASK_ID \
+  --include=${WORKSPACE}/profile/tmp/scripts/drush \
+  --config=${WORKSPACE}/profile/tmp/scripts/drush/${ACQUIA_SUBSCRIPTION}.acapi.drushrc.php \
+  --alias-path=${WORKSPACE}/profile/tmp/scripts/drush 2>&1 \
   | grep -E '^ state' | awk '{ print $NF }')" != "done" ]]
 do
   poll_count=`expr $poll_count + 1`
@@ -101,11 +106,11 @@ do
   sleep 2
 done
 
-drush @${PROJECT}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts --yes updatedb
+drush @${ACQUIA_SUBSCRIPTION}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts/drush --yes updatedb
 # Force reversion since sometimes its skipped when feature incorrectly assumes no changes.
-drush @${PROJECT}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts --yes features-revert-all --force
-drush @${PROJECT}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts --yes cache-clear all
+drush @${ACQUIA_SUBSCRIPTION}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts/drush --yes features-revert-all --force
+drush @${ACQUIA_SUBSCRIPTION}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts/drush --yes cache-clear all
 # List feature statuses to audit whether reversions happened correctly.
-drush @${PROJECT}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts --yes features-list
+drush @${ACQUIA_SUBSCRIPTION}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts/drush --yes features-list
 
 # Done
