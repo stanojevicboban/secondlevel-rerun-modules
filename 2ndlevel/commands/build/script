@@ -79,8 +79,8 @@ do
 done
 
 command -v compass >/dev/null && {
-  echo "Compass binary detected. Compiling SASS in profiles/${PROJECT}/themes/custom/${PROJECT}..."
+  echo "Detected 'compass' command as available. Compiling SASS in profiles/${PROJECT}/themes/custom/${PROJECT}..."
   compass compile ${DESTINATION}/profiles/${PROJECT}/themes/custom/${PROJECT}
-}
+} || echo "'compass' command unavailable. Not compiling SASS."
 
 # Done
