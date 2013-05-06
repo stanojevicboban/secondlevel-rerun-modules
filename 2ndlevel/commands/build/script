@@ -78,4 +78,9 @@ do
   echo "" | cat - $f | tee -a ${DESTINATION}/.htaccess > /dev/null
 done
 
+command -c compass >/dev/null && {
+  echo "Compass binary detected. Compiling SASS in profiles/${PROJECT}/themes/custom/${PROJECT}..."
+  compass compile ${DESTINATION}/profiles/${PROJECT}/themes/custom/${PROJECT}
+}
+
 # Done
