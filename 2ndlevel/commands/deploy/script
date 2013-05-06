@@ -98,12 +98,12 @@ while [[ "$(drush @${ACQUIA_SUBSCRIPTION}.dev ac-task-info $TASK_ID \
   | grep -E '^ state' | awk '{ print $NF }')" != "done" ]]
 do
   poll_count=`expr $poll_count + 1`
-  echo "API polls: $poll_count"
-  if [[ "$poll_count" -gt 10 ]]; then
+  echo "API polls: $poll_count of 10 attempted."
+  if [[ "$poll_count" -gt 9 ]]; then
     echo "ERROR: Timed out while waiting for Acquia backup."
     exit 1
   fi
-  sleep 2
+  sleep 15
 done
 
 drush @${ACQUIA_SUBSCRIPTION}.dev --alias-path=${WORKSPACE}/profile/tmp/scripts/drush --yes updatedb
