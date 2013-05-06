@@ -27,7 +27,7 @@ set -e
 
 # Install composer before running make, if not already installed
 # (Will only work on PHP 5.3+)
-drush dl composer-8.x-1.0-alpha3 --no
+drush dl composer-8.x-1.0-alpha8 --no
 
 # Convert to absolute paths
 BUILDFILE=`realpath "$BUILDFILE"`
