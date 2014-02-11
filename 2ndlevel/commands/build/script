@@ -78,6 +78,12 @@ do
   echo "" | cat - $f | tee -a ${DESTINATION}/.htaccess > /dev/null
 done
 
+echo "Copy files into docroot..."
+if [ -d ${DESTINATION}/profiles/${PROJECT}/tmp/copy_to_docroot ]; then
+ # Copy files into docroot
+ cp -r ${DESTINATION}/profiles/${PROJECT}/tmp/copy_to_docroot/. ${DESTINATION}
+fi 
+
 command -v compass >/dev/null && {
   echo "Detected 'compass' command as available. Compiling SASS in profiles/${PROJECT}/themes/custom/${PROJECT}..."
   compass compile ${DESTINATION}/profiles/${PROJECT}/themes/custom/${PROJECT}
