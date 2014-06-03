@@ -86,7 +86,7 @@ do
     #Take the regex variable and use in sed command with corresponding htaccess replacements
 
     # REPLACE
-    sed -e "/$REGEX/r $f" ${DESTINATION}/.htaccess > htaccess.tmp && mv htaccess.tmp ${DESTINATION}/.htaccess
+    sed -e "/$REGEX/r $f" $DESTINATION/.htaccess > htaccess.tmp && mv htaccess.tmp $DESTINATION/.htaccess
 done
 
 echo "Appending .htaccess snippets at the end of file..."
