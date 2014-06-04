@@ -80,9 +80,9 @@ for f in ${DESTINATION}/profiles/${PROJECT}/tmp/snippets/htaccess/*.exact.htacce
 do
     # Looks up regex file: {SAME_NAME}.exact.regex
     EXACT=`echo $f | sed -e 's/\.htaccess/.regex/g' -e 's/$DESTINATION\/tmp\/snippets\/htaccess\///g'`
-
+    echo "Exact path: $EXACT"
     # Store the regex in variable for searching
-    REGEX=$(<${DESTINATION}/tmp/snippets/regex/$EXACT)
+    REGEX=$(<${DESTINATION}tmp/snippets/regex/$EXACT)
 
     #Take the regex variable and use in sed command with corresponding htaccess replacements
     # REPLACE
