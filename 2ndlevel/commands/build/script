@@ -81,12 +81,11 @@ do
     EXACT=`echo $f | sed -e 's/\.htaccess/.regex/g' -e 's/tmp\/snippets\/htaccess\///g'`
 
     # Store the regex in variable for searching
-   REGEX=$(<tmp/snippets/regex/$EXACT)
+    REGEX=$(<${DESTINATION}/tmp/snippets/regex/$EXACT)
 
     #Take the regex variable and use in sed command with corresponding htaccess replacements
-
     # REPLACE
-    sed -e "/$REGEX/r $f" $DESTINATION/.htaccess > htaccess.tmp && mv htaccess.tmp $DESTINATION/.htaccess
+    sed -e "/$REGEX/r $f" ${DESTINATION}/.htaccess > htaccess.tmp && mv htaccess.tmp ${DESTINATION}/.htaccess
 done
 
 echo "Appending .htaccess snippets at the end of file..."
