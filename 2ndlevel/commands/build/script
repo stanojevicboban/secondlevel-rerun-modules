@@ -74,11 +74,12 @@ done
 # Exact Snippet Replacements
 echo "Exact position .htaccess snippets."
 # Get number of items properly and use var here
+echo "Destination: ${DESTINATION}"
 
 for f in ${DESTINATION}/profiles/${PROJECT}/tmp/snippets/htaccess/*.exact.htaccess
 do
     # Looks up regex file: {SAME_NAME}.exact.regex
-    EXACT=`echo $f | sed -e 's/\.htaccess/.regex/g' -e 's/tmp\/snippets\/htaccess\///g'`
+    EXACT=`echo $f | sed -e 's/\.htaccess/.regex/g' -e 's/$DESTINATION\/tmp\/snippets\/htaccess\///g'`
 
     # Store the regex in variable for searching
     REGEX=$(<${DESTINATION}/tmp/snippets/regex/$EXACT)
