@@ -71,23 +71,27 @@ do
   echo "" | cat $f - | cat - ${DESTINATION}/.htaccess > htaccess.tmp && mv htaccess.tmp ${DESTINATION}/.htaccess
 done
 
-# Exact Snippet Replacements
+
+
 echo "Exact position .htaccess snippets."
 # Get number of items properly and use var here
 echo "Destination: ${DESTINATION}"
 
 for f in ${DESTINATION}/profiles/${PROJECT}/tmp/snippets/htaccess/*.exact.htaccess
 do
+  echo "File $f"
     # Looks up regex file: {SAME_NAME}.exact.regex
-    EXACT=`echo $f | sed -e 's/\.htaccess/.regex/g' -e 's/$DESTINATION\/tmp\/snippets\/htaccess\///g'`
-    echo "Exact path: $EXACT"
+    EXACT=`echo $f | sed -e 's/htaccess/regex/g'` 
+   
+    echo "Exact file: $EXACT"
     # Store the regex in variable for searching
-    REGEX=$(<${DESTINATION}tmp/snippets/regex/$EXACT)
+    REGEX=$(<$EXACT)
 
     #Take the regex variable and use in sed command with corresponding htaccess replacements
     # REPLACE
     sed -e "/$REGEX/r $f" ${DESTINATION}/.htaccess > htaccess.tmp && mv htaccess.tmp ${DESTINATION}/.htaccess
 done
+
 
 echo "Appending .htaccess snippets at the end of file..."
 for f in ${DESTINATION}/profiles/${PROJECT}/tmp/snippets/htaccess/*.after.htaccess
