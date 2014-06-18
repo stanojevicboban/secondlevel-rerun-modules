@@ -64,6 +64,12 @@ done
 
 chmod u-w ${DESTINATION}/sites/default/settings.php
 
+echo "Copying main .htaccess file to docroot."
+# First, remove existing .htaccess file.
+rm ${DESTINATION}/.htaccess
+# Then recreate it, and later start adding snippets to it.
+cp ${DESTINATION}/profiles/${PROJECT}/tmp/snippets/htaccess/htaccess.main ${DESTINATION}/.htaccess
+
 echo "Prepending .htaccess snippets at the start of file."
 for f in ${DESTINATION}/profiles/${PROJECT}/tmp/snippets/htaccess/*.before.htaccess
 do
